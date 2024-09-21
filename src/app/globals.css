@@ -66,3 +66,16 @@
     background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
   }
 }
+/* In globals.css or Navbar.css */
+@font-face {
+  font-family: 'Gagalin';
+  src: url('/fonts/Gagalin.woff2') format('woff2'),
+       url('/fonts/Gagalin.woff') format('woff'),
+       url('/fonts/Gagalin.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.krishi-saathi-text {
+  font-family: 'Gagalin', sans-serif;
+}

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import csvData from "../../../data/commoditydata.csv";
 import Select from "react-select";
+import Image from "next/image";
 
 function Navbar({ onCommoditySelect, onFilterChange }) {
   const [selectedState, setSelectedState] = useState("");
@@ -46,10 +47,6 @@ function Navbar({ onCommoditySelect, onFilterChange }) {
           item.Market === selectedMarket
       );
 
-      // const topRated = selectedCommodity
-      //   ? csvData.filter((item) => item.Commodity === selectedCommodity)
-      //   : [];
-
       const topRated = csvData;
 
       setFilteredCommodities(filtered);
@@ -80,7 +77,14 @@ function Navbar({ onCommoditySelect, onFilterChange }) {
     <nav className="sticky top-0 z-10 bg-white shadow-2xl backdrop-filter backdrop-blur-2xl bg-opacity-10 border-slate-800">
       <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
         <a href="/" className="flex items-center gap-3">
-          <span className="text-xl font-semibold text-black lg:text-3xl">
+          <Image
+            src="/KrishiSaathiLogo.png"
+            alt="Krishi Saathi Logo"
+            height={45}
+            width={45}
+            className="w-10 h-10  lg:w-14 lg:h-14"
+          />
+          <span className="text-xl font-semibold text-black lg:text-3xl krishi-saathi-text ">
             Krishi Saathi
           </span>
         </a>
