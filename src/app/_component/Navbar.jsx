@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import csvData from "../../../data/commoditydata.csv";
+import commodityData from "../../../data/csvjson.json"; // Import the JSON file instead of CSV
 import Select from "react-select";
 import Image from "next/image";
 
@@ -8,29 +8,33 @@ function Navbar({ onCommoditySelect, onFilterChange }) {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedMarket, setSelectedMarket] = useState("");
-  const [commodities, setCommodities] = useState([]);
   const [filteredCommodities, setFilteredCommodities] = useState([]);
   const [selectedCommodity, setSelectedCommodity] = useState(null);
 
+  // Process the JSON data on component mount
   useEffect(() => {
-    // Process the CSV data
-    setCommodities(csvData);
+    setFilteredCommodities(commodityData);
   }, []);
 
-  const states = [...new Set(csvData.map((item) => item.State))];
+  // Get unique states from the JSON data
+  const states = [...new Set(commodityData.map((item) => item.State))];
+  
+  // Get unique districts based on the selected state
   const districts = selectedState
     ? [
         ...new Set(
-          csvData
+          commodityData
             .filter((item) => item.State === selectedState)
             .map((item) => item.District)
         ),
       ]
     : [];
+
+  // Get unique markets based on the selected district
   const markets = selectedDistrict
     ? [
         ...new Set(
-          csvData
+          commodityData
             .filter((item) => item.District === selectedDistrict)
             .map((item) => item.Market)
         ),
@@ -40,34 +44,28 @@ function Navbar({ onCommoditySelect, onFilterChange }) {
   // Filter commodities based on selected state, district, and market
   useEffect(() => {
     if (selectedState && selectedDistrict && selectedMarket) {
-      const filtered = csvData.filter(
+      const filtered = commodityData.filter(
         (item) =>
           item.State === selectedState &&
           item.District === selectedDistrict &&
           item.Market === selectedMarket
       );
 
-      const topRated = csvData;
-
       setFilteredCommodities(filtered);
-      onFilterChange({ filtered, topRated });
+      onFilterChange({ filtered });
     } else {
       setFilteredCommodities([]);
       onFilterChange({ filtered: [] });
     }
-  }, [
-    selectedState,
-    selectedDistrict,
-    selectedMarket,
-    selectedCommodity,
-    onFilterChange,
-  ]);
+  }, [selectedState, selectedDistrict, selectedMarket, onFilterChange]);
 
+  // Generate options for the commodity dropdown based on the filtered commodities
   const commodityOptions = filteredCommodities.map((item) => ({
     value: item,
     label: `${item.Commodity} - ${item.Variety} (${item.Grade})`,
   }));
 
+  // Handle commodity selection
   const handleCommodityChange = (selectedOption) => {
     setSelectedCommodity(selectedOption);
     onCommoditySelect(selectedOption ? selectedOption.value : null);
@@ -82,7 +80,7 @@ function Navbar({ onCommoditySelect, onFilterChange }) {
             alt="Krishi Saathi Logo"
             height={45}
             width={45}
-            className="w-10 h-10  lg:w-14 lg:h-14"
+            className="w-10 h-10 lg:w-14 lg:h-14"
           />
           <span className="text-xl font-semibold text-black lg:text-3xl krishi-saathi-text ">
             Krishi Saathi
